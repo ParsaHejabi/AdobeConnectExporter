@@ -14,7 +14,7 @@ An exporter for Adobe Connect recorded sessions for virtual classes held for Sha
 
 - When you hit enter you have to provide your `username` and your `password`. Make sure before hitting `login` button open developer view on your browser and go to the `network` section.
 
-![Chrome network section](https://github.com/ParsaHejabi/AdobeConnectExporter/tree/master/images/chrome.png)
+![Chrome network section](https://github.com/ParsaHejabi/AdobeConnectExporter/blob/master/images/Chrome.png)
 
 - When you hit enter your browser starts downloading a zip file and a record is added in the `network` section. click on that record and in the `headers` tab see `Request Headers` and copy the ```Cookie: ...``` text completely.
 
