@@ -5,11 +5,13 @@ An exporter for Adobe Connect recorded sessions for virtual classes held for Sha
 
 ## How to use
 
+**CAUTION:** This script is working for virtual classes of *Shahid Beheshti University* **ONLY**.
+
 - First of all grab a link provided by university for one of the classes and append `output/felan.zip?download=zip` to the end of the link.
 
-  - For example: <http://194.225.24.94/p9uxd7gt6zoc/>
+  - For example: <http://194.225.24.94/p9uxd7gt6zoc/> (This is a link provided by university.)
 
-  - This is a link provided by university. Changed link would be like:
+  - Changed link would be like:
   <http://194.225.24.94/p9uxd7gt6zoc/output/felan.zip?download=zip>
 
 - When you hit enter you have to provide your `username` and your `password`. Make sure before hitting `login` button open developer view on your browser and go to the `network` section.
