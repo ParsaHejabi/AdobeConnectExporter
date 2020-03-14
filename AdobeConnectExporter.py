@@ -35,6 +35,7 @@ def get_server():
     else:
         return str(input('Enter your universities server ip\n'))
 
+
 def run_command(command):
     print('running command: {0}'.format(command))
     process = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE)
@@ -141,11 +142,14 @@ def main():
     cameraVoip_filepaths = []
     for filepaths in sorted(glob.glob(os.path.join(output_folder, 'cameraVoip_*.flv'))):
         cameraVoip_filepaths.append(filepaths)
-    print('cameraVoip_filepaths: {0}'.format(cameraVoip_filepaths))
+    cameraVoip_filepaths.sort(key=lambda f: int(re.sub('\D', '', f)))
+    print('Sorted cameraVoip_filepaths: {0}'.format(cameraVoip_filepaths))
 
     screenshare_filepaths = []
     for filepaths in sorted(glob.glob(os.path.join(output_folder, 'screenshare_*.flv'))):
         screenshare_filepaths.append(filepaths)
+    screenshare_filepaths.sort(key=lambda f: int(re.sub('\D', '', f)))
+    print('Sorted screenshare_filepaths: {0}'.format(screenshare_filepaths))
 
     part = 0
     output_filepaths = []
