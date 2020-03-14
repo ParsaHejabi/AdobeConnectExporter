@@ -99,7 +99,7 @@ def main():
 
     # ================ Download video  ======================
     output_folder = connect_id
-    output_zip_filename = '{0}'.format(connect_id + '.zip?download=zip')
+    output_zip_filename = '{0}.zip'.format(connect_id)
     create_folder_if_not_exists(output_folder)
     create_folder_if_not_exists(main_output_folder)
 
@@ -107,8 +107,8 @@ def main():
     connect_zip_url = 'http://194.225.24.94/{0}/output/{0}.zip?download=zip'.format(
         connect_id)
     # -nc, --no-clobber: skip downloads that would download to existing files.
-    wget_command = 'wget -d -nc --header="{0}" {1}'.format(
-        cookie_header ,connect_zip_url)
+    wget_command = 'wget -O {2} -d -nc --header="{0}" {1}'.format(
+        cookie_header, connect_zip_url, output_zip_filename)
     run_command(wget_command)
     # -n: Unzip only newer files.
     unzip_command = 'unzip -n {0} -d {1}'.format(
