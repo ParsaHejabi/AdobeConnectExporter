@@ -15,6 +15,26 @@ import sys
 import re
 
 
+def get_server():
+    server_name = []
+    server_ip = []
+    with open('ipAddresses.txt', 'r') as file:
+        for line in file:
+            temp = line.split('\'')
+            server_name.append(temp[1])
+            server_ip.append(temp[3])
+    print('which University are you trying to connect to?')
+    for i in range(len(server_name)):
+        print('{0}-{1}'.format(i + 1, server_name[i]))
+    print("{0}-Other".format(len(server_name)+1))
+    option = int(input())
+    while option < 1 or option > len(server_name)+1:
+        option = int(input('Option not found. Try again\n'))
+    if option != len(server_name)+1:
+        return server_ip[option-1]
+    else:
+        return str(input('Enter your universities server ip\n'))
+
 def run_command(command):
     print('running command: {0}'.format(command))
     process = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE)
@@ -38,7 +58,7 @@ def create_folder_if_not_exists(directory):
         os.makedirs(directory)
 
 
-def extract_connect_id(parser, args):
+def extract_connect_id(parser, args, server_address):
     '''
     Function written by Aaron Hertzmann. Edited by Parsa Hejabi.
     '''
@@ -57,9 +77,9 @@ def extract_connect_id(parser, args):
     else:
         s = args.URLorIDorZIP[0].split('/')
         connectID = None
-        for i in range(len(s)-1):
-            if '194.225.24.94' in s[i]:
-                connectID = s[i+1]
+        for i in range(len(s) - 1):
+            if server_address in s[i]:
+                connectID = s[i + 1]
                 break
         if connectID == None:
             print("Error: couldn't parse URL")
@@ -73,6 +93,8 @@ def main():
     This is the main function
     '''
 
+    server_address = get_server()
+
     # ================ parse the arguments (part of the parsing code was written by Aaron Hertzmann and edited by Parsa Hejabi) ======================
 
     parser = argparse.ArgumentParser(
@@ -85,13 +107,13 @@ def main():
                         default='noname', help='output_filename')
     args = parser.parse_args()
 
-    #main_output_folder = "all_videos"
+    # main_output_folder = "all_videos"
     main_output_folder = args.output_folder
     output_filename = args.output_filename
     output_filename = re.sub(r'[^\w\s]', '', output_filename)
     output_filename = output_filename.replace('@', '').strip()
     print('output_filename: {0}'.format(output_filename))
-    connect_id = extract_connect_id(parser, args)
+    connect_id = extract_connect_id(parser, args, server_address)
     video_filename = output_filename
 
     with open('cookie.txt', 'r') as file:
@@ -104,7 +126,7 @@ def main():
     create_folder_if_not_exists(main_output_folder)
 
     # Step 1: retrieve audio and video files
-    connect_zip_url = 'http://194.225.24.94/{0}/output/{0}.zip?download=zip'.format(
+    connect_zip_url = 'http://' + server_address + '/{0}/output/{0}.zip?download=zip'.format(
         connect_id)
     # -nc, --no-clobber: skip downloads that would download to existing files.
     wget_command = 'wget -O {2} -d -nc --header="{0}" {1}'.format(
@@ -130,7 +152,7 @@ def main():
     for cameraVoip_filepath, screenshare_filepath in zip(cameraVoip_filepaths, screenshare_filepaths):
         output_filepath = os.path.join(
             main_output_folder, '{0}_{1:04d}.flv'.format(video_filename, part))
-        #output_filepath = '{0}_{1:04d}.flv'.format(video_filename, part)
+        # output_filepath = '{0}_{1:04d}.flv'.format(video_filename, part)
         output_filepaths.append(output_filepath)
         # ffmpeg command from Oliver Wang / Yannick Hold-Geoffroy / Aaron Hertzmann
         conversion_command = 'ffmpeg -i "%s" -i "%s" -c copy -map 0:a:0 -map 1:v:0 -shortest -y "%s"' % (
